@@ -48,15 +48,16 @@ static esp_ble_mesh_cfg_srv_t config_server = {
     .default_ttl = 4,
 };
 
-// Publication model for custom model 1;
+// Publication model for custom model 1.
 ESP_BLE_MESH_MODEL_PUB_DEFINE(custom_pub_1, 2 + 3, ROLE_NODE);
 // Op-Code for custom model 1.
 static esp_ble_mesh_model_op_t custom_op_code_1[] = {
     ESP_BLE_MESH_MODEL_OP(ESP_BLE_MESH_SERVER_MODEL_1_OP_SET, 2),
     ESP_BLE_MESH_MODEL_OP_END};
 
-// Publication model for cusotm model 2;
+// Publication model for cusotm model 2.
 ESP_BLE_MESH_MODEL_PUB_DEFINE(custom_pub_2, 2 + 3, ROLE_NODE);
+// Op-Code for custom model 2. 
 static esp_ble_mesh_model_op_t custom_op_code_2[] = {
     ESP_BLE_MESH_MODEL_OP(ESP_BLE_MESH_SERVER_MODEL_2_SET, 2),
     ESP_BLE_MESH_MODEL_OP_END,
