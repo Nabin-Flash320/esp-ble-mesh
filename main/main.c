@@ -27,8 +27,10 @@
 #define CID_ESP 0x02E5
 #define PIN 14
 
-#define ESP_BLE_MESH_SERVER_MODEL_NUM_1 0x0001
-#define ESP_BLE_MESH_SERVER_MODEL_NUM_2 0x0002
+// #define ESP_BLE_MESH_SERVER_MODEL_NUM_1 0x0001
+// #define ESP_BLE_MESH_SERVER_MODEL_NUM_2 0x0002
+static const uint16_t ESP_BLE_MESH_SERVER_MODEL_NUM_1 = 0x0001;
+static const uint16_t ESP_BLE_MESH_SERVER_MODEL_NUM_2 = 0x0002;
 
 #define ESP_BLE_MESH_SERVER_MODEL_1_OP_SET ESP_BLE_MESH_MODEL_OP_3(0x00, CID_ESP)
 #define ESP_BLE_MESH_SERVER_MODEL_1_OP_STATUS ESP_BLE_MESH_MODEL_OP_3(0x01, CID_ESP)
@@ -57,7 +59,7 @@ static esp_ble_mesh_model_op_t custom_op_code_1[] = {
 
 // Publication model for cusotm model 2.
 ESP_BLE_MESH_MODEL_PUB_DEFINE(custom_pub_2, 2 + 3, ROLE_NODE);
-// Op-Code for custom model 2. 
+// Op-Code for custom model 2.
 static esp_ble_mesh_model_op_t custom_op_code_2[] = {
     ESP_BLE_MESH_MODEL_OP(ESP_BLE_MESH_SERVER_MODEL_2_SET, 2),
     ESP_BLE_MESH_MODEL_OP_END,
@@ -67,10 +69,24 @@ static esp_ble_mesh_model_t root_models[] = {
     ESP_BLE_MESH_MODEL_CFG_SRV(&config_server),
 };
 
-// Adding custom model to root_model array.
+// Adding custom model to root_model array using structure instead ESP_BLE_MESH_VENDOR_MODEL() macro.
 static esp_ble_mesh_model_t custom_LED_model[] = {
-    ESP_BLE_MESH_VENDOR_MODEL(CID_ESP, ESP_BLE_MESH_SERVER_MODEL_NUM_1, custom_op_code_1, &custom_pub_1, NULL),
-    ESP_BLE_MESH_VENDOR_MODEL(CID_ESP, ESP_BLE_MESH_SERVER_MODEL_NUM_2, custom_op_code_2, &custom_pub_2, NULL),
+    {
+        .vnd.company_id = CID_ESP,
+        .vnd.model_id = ESP_BLE_MESH_SERVER_MODEL_NUM_1,
+        .op = custom_op_code_1,
+        .pub = &custom_pub_1,
+        .cb = NULL,
+        .user_data = NULL,
+    },
+    {
+        .vnd.company_id = CID_ESP,
+        .vnd.model_id = ESP_BLE_MESH_SERVER_MODEL_NUM_2,
+        .op = custom_op_code_2,
+        .pub = &custom_pub_2,
+        .cb = NULL,
+        .user_data = NULL,
+    },
 };
 
 static esp_ble_mesh_prov_t provision = {
