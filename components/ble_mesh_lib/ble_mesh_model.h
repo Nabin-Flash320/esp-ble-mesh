@@ -5,6 +5,11 @@
 // Custom libs
 #include "ble_mesh_definitions.h"
 #include "ble_mesh_op_code.h"
+#include "ble_mesh_structs.h"
+#include "ble_mesh_callbacks.h"
+
+// LED controller.
+#include "LED.h"
 
 
 static esp_ble_mesh_cfg_srv_t config_server = {
@@ -23,6 +28,18 @@ static esp_ble_mesh_model_t root_models[] = {
 
 // Publication model for custom model 1.
 ESP_BLE_MESH_MODEL_PUB_DEFINE(custom_pub_1, 2 + 3, ROLE_NODE);
+// Creating user data.
+static LED_server_struct_struct_t LED_struct = {
+    .current_state = false,
+    .inverted_output = false,
+    .LED_gpio = 48,
+    .previous_state = false,
+    .LED_configured = false,
+};
+static custom_model_user_data_struct_t LED_model_struct = {
+    .cb = LED_callback,
+    .args = (void*)&LED_struct,
+};
 // Adding custom model to root_model array using structure instead ESP_BLE_MESH_VENDOR_MODEL() macro.
 static esp_ble_mesh_model_t custom_LED_model[] = {
     {
@@ -31,7 +48,7 @@ static esp_ble_mesh_model_t custom_LED_model[] = {
         .op = custom_op_code_1,
         .pub = &custom_pub_1,
         .cb = NULL,
-        .user_data = NULL,
+        .user_data = (void*)&LED_model_struct,
     },
 };
 

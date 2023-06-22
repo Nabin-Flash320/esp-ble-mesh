@@ -24,6 +24,7 @@
 #include "ble_mesh_definitions.h"
 #include "ble_mesh_op_code.h"
 #include "ble_mesh_model.h"
+#include "ble_mesh_structs.h"
 #include "LED.h"
 
 static uint8_t dev_uuid[16] = {0xdd, 0xdd};
@@ -160,13 +161,12 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
     case ESP_BLE_MESH_MODEL_OPERATION_EVT:
     {
         TRACE_I("ESP_BLE_MESH_MODEL_OPERATION_EVT");
-        TRACE_I("Received OP code is 0x%X; Length of received message is %d", param->model_operation.opcode, param->model_operation.length);
-        for (int i = 0; i < param->model_operation.length; i++)
-        {
-            TRACE_E("Message is 0x%2X", param->model_operation.msg[i]);
-        }
         TRACE_E("Model id is 0x%X", param->model_operation.model->vnd.model_id);
-        TRACE_E("Model callback is %s", ((param->model_operation.model->cb == NULL) ? "NULL" : "!NULL"));
+        custom_model_user_data_struct_t *model_struct = (custom_model_user_data_struct_t *)param->model_operation.model->user_data;
+        if (NULL != model_struct)
+        {
+            model_struct->cb(param, model_struct->args);
+        }
         break;
     }
     case ESP_BLE_MESH_MODEL_SEND_COMP_EVT:
