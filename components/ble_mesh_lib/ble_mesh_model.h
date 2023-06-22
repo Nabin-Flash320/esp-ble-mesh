@@ -32,7 +32,7 @@ ESP_BLE_MESH_MODEL_PUB_DEFINE(custom_pub_1, 2 + 3, ROLE_NODE);
 static LED_server_struct_struct_t LED_struct = {
     .current_state = false,
     .inverted_output = false,
-    .LED_gpio = 48,
+    .LED_gpio = 3,
     .previous_state = false,
     .LED_configured = false,
 };
