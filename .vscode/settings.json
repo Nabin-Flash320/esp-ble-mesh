@@ -4,6 +4,7 @@
     "files.associations": {
         "debug.h": "c",
         "ble_mesh_example_init.h": "c",
-        "*.inc": "c"
+        "*.inc": "c",
+        "ble_mesh_definitions.h": "c"
     }
 }
