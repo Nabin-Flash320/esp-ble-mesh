@@ -29,5 +29,7 @@ static esp_ble_mesh_model_op_t custom_op_code_1[] = {
     ESP_BLE_MESH_MODEL_OP_END,
 };
 
+esp_ble_mesh_model_op_t ble_mesh_create_opcode(uint32_t opcode, size_t opcode_message_len);
+
 
 #endif // _BLE_MESH_OP_CODE_H_

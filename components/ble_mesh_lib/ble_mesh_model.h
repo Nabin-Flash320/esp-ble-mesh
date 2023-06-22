@@ -36,10 +36,12 @@ static LED_server_struct_struct_t LED_struct = {
     .previous_state = false,
     .LED_configured = false,
 };
+
 static custom_model_user_data_struct_t LED_model_struct = {
     .cb = LED_callback,
     .args = (void*)&LED_struct,
 };
+
 // Adding custom model to root_model array using structure instead ESP_BLE_MESH_VENDOR_MODEL() macro.
 static esp_ble_mesh_model_t custom_LED_model[] = {
     {
@@ -51,5 +53,18 @@ static esp_ble_mesh_model_t custom_LED_model[] = {
         .user_data = (void*)&LED_model_struct,
     },
 };
+
+esp_ble_mesh_model_t ble_mesh_create_mesh_model(uint16_t mesh_model_id, esp_ble_mesh_model_op_t *model_opcode, esp_ble_mesh_model_pub_t *const model_publication, void *user_data)
+{
+    esp_ble_mesh_model_t mesh_model = {
+        .vnd.company_id = CID_ESP,
+        .vnd.model_id = mesh_model_id,
+        .op = model_opcode,
+        .pub = model_publication,
+        .cb = NULL,
+        .user_data = user_data,
+    };
+    return mesh_model;
+}
 
 #endif // __BLE_MESH_MODEL_H__
