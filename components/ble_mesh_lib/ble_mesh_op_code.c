@@ -5,7 +5,7 @@
 #include "ble_mesh_op_code.h"
 
 
-esp_ble_mesh_model_op_t ble_mesh_create_opcode(uint32_t opcode, size_t opcode_message_len)
+esp_ble_mesh_model_op_t ble_mesh_create_opcode(const uint32_t opcode, size_t opcode_message_len)
 {
     esp_ble_mesh_model_op_t model_opcode = {
         .opcode = opcode,

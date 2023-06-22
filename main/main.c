@@ -25,6 +25,7 @@
 #include "ble_mesh_op_code.h"
 #include "ble_mesh_model.h"
 #include "ble_mesh_structs.h"
+#include "ble_mesh_pub.h"
 #include "LED.h"
 
 static uint8_t dev_uuid[16] = {0xdd, 0xdd};
@@ -37,15 +38,39 @@ static esp_ble_mesh_prov_t provision = {
     .input_actions = ESP_BLE_MESH_PUSH,
 };
 
-static esp_ble_mesh_elem_t elements[] = {
-    ESP_BLE_MESH_ELEMENT(0, root_models, custom_LED_model),
+static esp_ble_mesh_cfg_srv_t config_server = {
+    .net_transmit = ESP_BLE_MESH_TRANSMIT(2, 20),
+    .relay = ESP_BLE_MESH_RELAY_DISABLED,
+    .relay_retransmit = ESP_BLE_MESH_TRANSMIT(2, 20),
+    .beacon = ESP_BLE_MESH_BEACON_ENABLED,
+    .friend_state = ESP_BLE_MESH_FRIEND_NOT_SUPPORTED,
+    .gatt_proxy = ESP_BLE_MESH_GATT_PROXY_ENABLED,
+    .default_ttl = 4,
 };
 
-esp_ble_mesh_comp_t composition = {
-    .cid = CID_ESP,
-    .element_count = ARRAY_SIZE(elements),
-    .elements = elements,
+static esp_ble_mesh_model_t root_models[] = {
+    ESP_BLE_MESH_MODEL_CFG_SRV(&config_server),
 };
+
+// static esp_ble_mesh_elem_t elements[] = {
+//     ESP_BLE_MESH_ELEMENT(0, root_models, custom_LED_model),
+// };
+
+static esp_ble_mesh_elem_t create_ble_mesh_element(uint16_t element_location,
+                                                   esp_ble_mesh_model_t sig_model[],
+                                                   size_t sig_model_len,
+                                                   esp_ble_mesh_model_t vendor_model[],
+                                                   size_t vendor_model_len)
+{
+    esp_ble_mesh_elem_t mesh_element = {
+        .location = element_location,
+        .sig_models = sig_model,
+        .sig_model_count = sig_model_len,
+        .vnd_models = vendor_model,
+        .vnd_model_count = vendor_model_len,
+    };
+    return mesh_element;
+}
 
 static void bluetooth_mesh_provisioning_cb(esp_ble_mesh_prov_cb_event_t event,
                                            esp_ble_mesh_prov_cb_param_t *param)
@@ -185,6 +210,32 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
 ERROR ble_mesh_initialize()
 {
     ERROR error = ESP_OK;
+
+    esp_ble_mesh_model_op_t custom_op_code_1[] = {
+        ble_mesh_create_opcode(ESP_BLE_MESH_LED_SERVER_MODEL_OP_CONFIG, 1),
+        ble_mesh_create_opcode(ESP_BLE_MESH_LED_SERVER_MODEL_OP_SET, 1),
+        ESP_BLE_MESH_MODEL_OP_END,
+    };
+
+    esp_ble_mesh_model_pub_t custom_model_pub = create_ble_mesh_publication(20, ROLE_NODE);
+
+    esp_ble_mesh_model_t custom_mesh_model[] = {
+        ble_mesh_create_mesh_model(ESP_BLE_MESH_LED_SERVER_MODEL, custom_op_code_1, &custom_model_pub, NULL),
+    };
+
+    size_t root_model_array_len = ARRAY_SIZE(root_models);
+    size_t custom_model_array_len = ARRAY_SIZE(custom_mesh_model);
+
+    esp_ble_mesh_elem_t custom_mesh_element[] = {
+        create_ble_mesh_element(0, root_models, root_model_array_len, custom_mesh_model, custom_model_array_len),
+    };
+
+    esp_ble_mesh_comp_t composition = {
+        .cid = CID_ESP,
+        .element_count = ARRAY_SIZE(custom_mesh_element),
+        .elements = custom_mesh_element,
+    };
+
     esp_ble_mesh_register_prov_callback(bluetooth_mesh_provisioning_cb);
     esp_ble_mesh_register_config_server_callback(bluetooth_mesh_config_server_cb);
     esp_ble_mesh_register_custom_model_callback(bluetooth_mesh_custon_model_cb);
