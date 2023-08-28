@@ -4,7 +4,7 @@
 #include "esp_ble_mesh_defs.h"
 #include "LED.h"
 
-void LED_callback(esp_ble_mesh_model_cb_param_t *params, void *user_data)
+void LED_model_callback(esp_ble_mesh_model_cb_param_t *params, void *user_data)
 {
     TRACE_I("OP code received is 0x%X", params->model_operation.opcode);
     LED_server_struct_struct_t *led_struct = (LED_server_struct_struct_t *)user_data;

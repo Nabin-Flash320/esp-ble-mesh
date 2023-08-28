@@ -175,7 +175,7 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
         custom_model_user_data_struct_t *model_struct = (custom_model_user_data_struct_t *)param->model_operation.model->user_data;
         if (NULL != model_struct)
         {
-            model_struct->cb(param, model_struct->args);
+            model_struct->model_cb(param, model_struct->args);
         }
         break;
     }
@@ -187,6 +187,7 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
     case ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT:
     {
         TRACE_I("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT");
+        // esp_ble_mesh_model_publish(model, ESP_BLE_MESH_MODEL_OP_SENSOR_STATUS, length, status, ROLE_NODE);
 #pragma message("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT perform operation here, loadprohibited is encountered.");
         break;
     }
