@@ -58,7 +58,7 @@ esp_err_t set_LED(LED_server_struct_struct_t *LED_struct, uint32_t val)
 esp_err_t deconfigure_LED(LED_server_struct_struct_t *LED_struct)
 {
     esp_err_t error = ESP_OK;
-    if(LED_struct->LED_configured)
+    if (LED_struct->LED_configured)
     {
         ESP_ERROR_CHECK(gpio_set_level(LED_struct->LED_gpio, 0));
         ESP_ERROR_CHECK(gpio_reset_pin(LED_struct->LED_gpio));
@@ -72,7 +72,7 @@ esp_err_t deconfigure_LED(LED_server_struct_struct_t *LED_struct)
     return error;
 }
 
-bool send_LED_current_state(LED_server_struct_struct_t *LED_struct)
+bool get_LED_current_state(LED_server_struct_struct_t *LED_struct)
 {
     return LED_struct->current_state;
 }

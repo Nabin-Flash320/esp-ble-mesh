@@ -5,7 +5,7 @@
 #include "esp_ble_mesh_defs.h"
 
 typedef void (*custom_model_callback)(esp_ble_mesh_model_cb_param_t *param, void *user_data);
-typedef size_t (*custom_model_publishcation_callback)(uint8_t *data);
+typedef size_t (*custom_model_publishcation_callback)(void *user_data, uint8_t *data);
 
 typedef struct
 {

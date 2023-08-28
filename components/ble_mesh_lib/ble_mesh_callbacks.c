@@ -13,7 +13,7 @@ void LED_model_callback(esp_ble_mesh_model_cb_param_t *params, void *user_data)
     case 0xC002E5:
     {
         uint32_t value = params->model_operation.msg[0];
-        if(0x01 == value)
+        if (0x01 == value)
         {
             configure_LED(led_struct);
         }
@@ -39,4 +39,21 @@ void LED_model_callback(esp_ble_mesh_model_cb_param_t *params, void *user_data)
         break;
     }
     }
+}
+
+size_t LED_publication_callback(void *user_data, uint8_t *data)
+{
+    LED_server_struct_struct_t *led_struct = (LED_server_struct_struct_t *)user_data;
+    size_t len = 2;
+    data = (uint8_t *)malloc(2);
+    if (data)
+    {
+        bool state = get_LED_current_state(led_struct);
+        *data = state;
+    }
+    else
+    {
+        free(data);
+    }
+    return len;
 }

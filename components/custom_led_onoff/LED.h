@@ -18,7 +18,7 @@ typedef struct LED_state_struct
 esp_err_t configure_LED(LED_server_struct_struct_t *LED_struct);
 esp_err_t set_LED(LED_server_struct_struct_t *LED_struct, uint32_t val);
 esp_err_t deconfigure_LED(LED_server_struct_struct_t *LED_struct);
-bool send_LED_current_state(LED_server_struct_struct_t *LED_struct);
+bool get_LED_current_state(LED_server_struct_struct_t *LED_struct);
 
 
 #endif // __LED_H__

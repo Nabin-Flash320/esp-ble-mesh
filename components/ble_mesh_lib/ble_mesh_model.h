@@ -37,7 +37,7 @@ static LED_server_struct_struct_t LED_struct = {
 };
 static custom_model_user_data_struct_t LED_model_struct = {
     .model_cb = LED_model_callback,
-    .publication_cb = NULL;
+    .publication_cb = LED_publication_callback,
     .args = (void*)&LED_struct,
 };
 // Adding custom model to root_model array using structure instead ESP_BLE_MESH_VENDOR_MODEL() macro.

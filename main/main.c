@@ -148,10 +148,11 @@ static void bluetooth_mesh_config_server_cb(esp_ble_mesh_cfg_server_cb_event_t e
         {
             TRACE_I("ESP_BLE_MESH_MODEL_OP_MODEL_PUB_SET");
             TRACE_I("elem_addr 0x%04x, pub_addr 0x%04x, publish_app_id 0x%04x, cred_flag %d, ttl %d, period %d, retransmit %d, \
-                        model id 0x%04x, company id 0x%04x", param->value.state_change.mod_pub_set.element_addr, param->value.state_change.mod_pub_set.pub_addr,
-                        param->value.state_change.mod_pub_set.app_idx, param->value.state_change.mod_pub_set.cred_flag, param->value.state_change.mod_pub_set.pub_ttl,
-                        param->value.state_change.mod_pub_set.pub_period, param->value.state_change.mod_pub_set.pub_retransmit, 
-                        param->value.state_change.mod_pub_set.model_id, param->value.state_change.mod_pub_set.company_id);
+                        model id 0x%04x, company id 0x%04x",
+                    param->value.state_change.mod_pub_set.element_addr, param->value.state_change.mod_pub_set.pub_addr,
+                    param->value.state_change.mod_pub_set.app_idx, param->value.state_change.mod_pub_set.cred_flag, param->value.state_change.mod_pub_set.pub_ttl,
+                    param->value.state_change.mod_pub_set.pub_period, param->value.state_change.mod_pub_set.pub_retransmit,
+                    param->value.state_change.mod_pub_set.model_id, param->value.state_change.mod_pub_set.company_id);
             break;
         }
         default:
@@ -187,7 +188,14 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
     case ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT:
     {
         TRACE_I("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT");
-        // esp_ble_mesh_model_publish(model, ESP_BLE_MESH_MODEL_OP_SENSOR_STATUS, length, status, ROLE_NODE);
+        TRACE_E("length");
+        custom_model_user_data_struct_t *model_struct = (custom_model_user_data_struct_t *)param->model_operation.model->user_data;
+        if (model_struct)
+        {
+            uint8_t *data = NULL;
+            size_t length = model_struct->publication_cb(model_struct->args, data);
+            esp_ble_mesh_model_publish(param->model_operation.model, ESP_BLE_MESH_MODEL_OP_SENSOR_STATUS, length, data, ROLE_NODE);
+        }
 #pragma message("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT perform operation here, loadprohibited is encountered.");
         break;
     }
