@@ -187,7 +187,6 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
     case ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT:
     {
         TRACE_I("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT");
-        esp_ble_mesh_model_publish(param->model_publish_update.model, ESP_BLE_MESH_LED_SERVER_MODEL_OP_STATUS, 1, 1, ROLE_NODE);
 #pragma message("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT perform operation here, loadprohibited is encountered.");
         break;
     }

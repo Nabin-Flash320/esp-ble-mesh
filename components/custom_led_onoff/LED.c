@@ -72,3 +72,7 @@ esp_err_t deconfigure_LED(LED_server_struct_struct_t *LED_struct)
     return error;
 }
 
+bool send_LED_current_state(LED_server_struct_struct_t *LED_struct)
+{
+    return LED_struct->current_state;
+}
