@@ -30,9 +30,9 @@ static esp_ble_mesh_model_t root_models[] = {
 ESP_BLE_MESH_MODEL_PUB_DEFINE(custom_pub_1, 2 + 3, ROLE_NODE);
 // Creating user data.
 static LED_server_struct_struct_t LED_struct = {
-    .current_state = false,
+    .current_state = true,
     .inverted_output = false,
-    .LED_gpio = 3,
+    .LED_gpio = 2,
     .previous_state = false,
     .LED_configured = false,
 };

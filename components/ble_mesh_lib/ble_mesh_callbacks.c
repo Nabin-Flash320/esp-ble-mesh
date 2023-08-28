@@ -12,7 +12,19 @@ void LED_callback(esp_ble_mesh_model_cb_param_t *params, void *user_data)
     {
     case 0xC002E5:
     {
-        configure_LED(led_struct);
+        uint32_t value = params->model_operation.msg[0];
+        if(0x01 == value)
+        {
+            configure_LED(led_struct);
+        }
+        else if (0x00 == value)
+        {
+            deconfigure_LED(led_struct);
+        }
+        else
+        {
+            TRACE_E("Unknown command received.");
+        }
         break;
     }
     case 0xC102E5:

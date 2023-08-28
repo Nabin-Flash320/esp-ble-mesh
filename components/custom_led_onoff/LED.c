@@ -54,3 +54,21 @@ esp_err_t set_LED(LED_server_struct_struct_t *LED_struct, uint32_t val)
     }
     return ret;
 }
+
+esp_err_t deconfigure_LED(LED_server_struct_struct_t *LED_struct)
+{
+    esp_err_t error = ESP_OK;
+    if(LED_struct->LED_configured)
+    {
+        ESP_ERROR_CHECK(gpio_set_level(LED_struct->LED_gpio, 0));
+        ESP_ERROR_CHECK(gpio_reset_pin(LED_struct->LED_gpio));
+        LED_struct->LED_configured = false;
+    }
+    else
+    {
+        TRACE_E("GPIO has not been configured yet.");
+        error = ESP_FAIL;
+    }
+    return error;
+}
+

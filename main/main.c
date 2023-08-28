@@ -144,6 +144,16 @@ static void bluetooth_mesh_config_server_cb(esp_ble_mesh_cfg_server_cb_event_t e
             TRACE_I("ESP_BLE_MESH_MODEL_OP_RELAY_SET");
             break;
         }
+        case ESP_BLE_MESH_MODEL_OP_MODEL_PUB_SET:
+        {
+            TRACE_I("ESP_BLE_MESH_MODEL_OP_MODEL_PUB_SET");
+            TRACE_I("elem_addr 0x%04x, pub_addr 0x%04x, publish_app_id 0x%04x, cred_flag %d, ttl %d, period %d, retransmit %d, \
+                        model id 0x%04x, company id 0x%04x", param->value.state_change.mod_pub_set.element_addr, param->value.state_change.mod_pub_set.pub_addr,
+                        param->value.state_change.mod_pub_set.app_idx, param->value.state_change.mod_pub_set.cred_flag, param->value.state_change.mod_pub_set.pub_ttl,
+                        param->value.state_change.mod_pub_set.pub_period, param->value.state_change.mod_pub_set.pub_retransmit, 
+                        param->value.state_change.mod_pub_set.model_id, param->value.state_change.mod_pub_set.company_id);
+            break;
+        }
         default:
         {
             TRACE_I("Default recv_op. %d", param->ctx.recv_op);
@@ -172,6 +182,34 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
     case ESP_BLE_MESH_MODEL_SEND_COMP_EVT:
     {
         TRACE_I("ESP_BLE_MESH_MODEL_SEND_COMP_EVT");
+        break;
+    }
+    case ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT:
+    {
+        TRACE_I("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT");
+        esp_ble_mesh_model_publish(param->model_publish_update.model, ESP_BLE_MESH_LED_SERVER_MODEL_OP_STATUS, 1, 1, ROLE_NODE);
+#pragma message("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT perform operation here, loadprohibited is encountered.");
+        break;
+    }
+    case ESP_BLE_MESH_MODEL_PUBLISH_COMP_EVT:
+    {
+        TRACE_I("ESP_BLE_MESH_MODEL_PUBLISH_COMP_EVT");
+        TRACE_I("The error code is %s", esp_err_to_name(param->model_publish_comp.err_code));
+        break;
+    }
+    case ESP_BLE_MESH_CLIENT_MODEL_RECV_PUBLISH_MSG_EVT:
+    {
+        TRACE_I("ESP_BLE_MESH_CLIENT_MODEL_RECV_PUBLISH_MSG_EVT");
+        break;
+    }
+    case ESP_BLE_MESH_CLIENT_MODEL_SEND_TIMEOUT_EVT:
+    {
+        TRACE_E("ESP_BLE_MESH_CLIENT_MODEL_SEND_TIMEOUT_EVT");
+        break;
+    }
+    case ESP_BLE_MESH_SERVER_MODEL_UPDATE_STATE_COMP_EVT:
+    {
+        TRACE_I("ESP_BLE_MESH_SERVER_MODEL_UPDATE_STATE_COMP_EVT");
         break;
     }
     default:
