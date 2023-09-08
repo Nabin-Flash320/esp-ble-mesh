@@ -2,7 +2,6 @@
 #define _BLE_MESH_DEFINITIONS_H_
 
 
-#define ERROR esp_err_t
 #define DEVICE_NAME "LED server"
 #define CID_ESP 0x02E5
 

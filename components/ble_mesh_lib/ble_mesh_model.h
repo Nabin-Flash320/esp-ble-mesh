@@ -12,7 +12,6 @@
 // LED controller.
 #include "LED.h"
 
-
 static esp_ble_mesh_cfg_srv_t config_server = {
     .net_transmit = ESP_BLE_MESH_TRANSMIT(2, 20),
     .relay = ESP_BLE_MESH_RELAY_DISABLED,
@@ -38,7 +37,7 @@ static LED_server_struct_struct_t LED_struct = {
 static custom_model_user_data_struct_t LED_model_struct = {
     .model_cb = LED_model_callback,
     .publication_cb = LED_publication_callback,
-    .args = (void*)&LED_struct,
+    .args = (void *)&LED_struct,
 };
 // Adding custom model to root_model array using structure instead ESP_BLE_MESH_VENDOR_MODEL() macro.
 static esp_ble_mesh_model_t custom_LED_model[] = {
@@ -48,8 +47,21 @@ static esp_ble_mesh_model_t custom_LED_model[] = {
         .op = custom_op_code_1,
         .pub = &LED_server_publication,
         .cb = NULL,
-        .user_data = (void*)&LED_model_struct,
+        .user_data = (void *)&LED_model_struct,
     },
 };
+
+inline static esp_ble_mesh_model_t ble_mesh_model_init(uint16_t model_id, esp_ble_mesh_model_op_t model_opcode[], esp_ble_mesh_model_pub_t *model_publication, void *user_data)
+{
+    esp_ble_mesh_model_t mesh_model = {
+        .vnd.company_id = CID_ESP,
+        .vnd.model_id = model_id,
+        .op = model_opcode,
+        .pub = model_publication,
+        .cb = NULL,
+        .user_data = (void *)user_data,
+    };
+    return mesh_model;
+}
 
 #endif // __BLE_MESH_MODEL_H__

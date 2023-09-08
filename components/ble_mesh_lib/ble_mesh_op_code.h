@@ -13,7 +13,6 @@
 #define ESP_BLE_MESH_LED_SERVER_MODEL_OP_SET ESP_BLE_MESH_MODEL_OP_3(0x01, CID_ESP)
 #define ESP_BLE_MESH_LED_SERVER_MODEL_OP_STATUS ESP_BLE_MESH_MODEL_OP_3(0x02, CID_ESP)
 
-
 // Op-Code for custom model 1.
 static esp_ble_mesh_model_op_t custom_op_code_1[] = {
     {
@@ -29,5 +28,14 @@ static esp_ble_mesh_model_op_t custom_op_code_1[] = {
     ESP_BLE_MESH_MODEL_OP_END,
 };
 
+inline static esp_ble_mesh_model_op_t ble_mesh_op_code_init(uint16_t opcode_id, size_t message_len)
+{
+    esp_ble_mesh_model_op_t custom_op_code = {
+        .min_len = message_len,
+        .opcode = opcode_id,
+        .param_cb = (uint32_t)NULL,
+    };
+    return custom_op_code;
+}
 
 #endif // _BLE_MESH_OP_CODE_H_

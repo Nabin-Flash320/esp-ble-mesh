@@ -19,6 +19,26 @@ static esp_ble_mesh_model_pub_t LED_server_publication = {
     .dev_role = ROLE_NODE,
 };
 
+inline static struct net_buf_simple ble_mesh_get_net_buf(size_t net_buf_size)
+{
+    uint8_t *mesh_server_data_buf = (uint8_t *)malloc(net_buf_size * sizeof(uint8_t));
+    struct net_buf_simple mesh_server_net_buf = {
+        .data = mesh_server_data_buf,
+        .len = 0,
+        .size = net_buf_size,
+        .__buf = mesh_server_data_buf,
+    };
+    return mesh_server_net_buf;
+}
+
+inline static esp_ble_mesh_model_pub_t mesh_server_publication_init(uint8_t mesh_node_role, size_t net_buf_size, struct net_buf_simple mesh_server_net_buf)
+{
+    esp_ble_mesh_model_pub_t mesh_server_publication = {
+        .update = (uint32_t)NULL,
+        .msg = &mesh_server_net_buf,
+        .dev_role = mesh_node_role,
+    };
+    return mesh_server_publication;
+}
+
 #endif // __BLE_MESH_PUBLICATION_H__
-
-
