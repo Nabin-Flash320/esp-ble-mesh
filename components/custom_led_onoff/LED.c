@@ -40,7 +40,6 @@ esp_err_t set_LED(LED_server_struct_struct_t *LED_struct, uint32_t val)
     esp_err_t ret = ESP_OK;
     if (LED_struct->LED_configured)
     {
-        TRACE_E("HERE!! value is %d", val);
         ret = gpio_set_level(LED_struct->LED_gpio, val);
         if (ESP_OK == ret)
         {
@@ -74,5 +73,5 @@ esp_err_t deconfigure_LED(LED_server_struct_struct_t *LED_struct)
 
 bool get_LED_current_state(LED_server_struct_struct_t *LED_struct)
 {
-    return LED_struct->current_state;
+    return LED_struct->LED_configured ? LED_struct->current_state : false;
 }

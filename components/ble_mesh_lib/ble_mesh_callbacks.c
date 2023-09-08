@@ -6,7 +6,6 @@
 
 void LED_model_callback(esp_ble_mesh_model_cb_param_t *params, void *user_data)
 {
-    TRACE_I("OP code received is 0x%X", params->model_operation.opcode);
     LED_server_struct_struct_t *led_struct = (LED_server_struct_struct_t *)user_data;
     switch (params->model_operation.opcode)
     {
@@ -41,7 +40,7 @@ void LED_model_callback(esp_ble_mesh_model_cb_param_t *params, void *user_data)
     }
 }
 
-size_t LED_publication_callback(void *user_data, uint8_t *data)
+size_t  LED_publication_callback(void *user_data, uint8_t *data)
 {
     LED_server_struct_struct_t *led_struct = (LED_server_struct_struct_t *)user_data;
     size_t len = 2;
@@ -49,6 +48,7 @@ size_t LED_publication_callback(void *user_data, uint8_t *data)
     if (data)
     {
         bool state = get_LED_current_state(led_struct);
+        TRACE_I("Led state is %d", state);
         *data = state;
     }
     else

@@ -188,15 +188,13 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
     case ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT:
     {
         TRACE_I("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT");
-        TRACE_E("length");
-        custom_model_user_data_struct_t *model_struct = (custom_model_user_data_struct_t *)param->model_operation.model->user_data;
+        custom_model_user_data_struct_t *model_struct = (custom_model_user_data_struct_t *)param->model_publish_update.model->user_data;
         if (model_struct)
         {
             uint8_t *data = NULL;
             size_t length = model_struct->publication_cb(model_struct->args, data);
-            esp_ble_mesh_model_publish(param->model_operation.model, ESP_BLE_MESH_MODEL_OP_SENSOR_STATUS, length, data, ROLE_NODE);
+            esp_ble_mesh_model_publish(param->model_publish_update.model, ESP_BLE_MESH_MODEL_OP_SENSOR_STATUS, length, data, ROLE_NODE);
         }
-#pragma message("ESP_BLE_MESH_MODEL_PUBLISH_UPDATE_EVT perform operation here, loadprohibited is encountered.");
         break;
     }
     case ESP_BLE_MESH_MODEL_PUBLISH_COMP_EVT:
@@ -204,7 +202,7 @@ static void bluetooth_mesh_custon_model_cb(esp_ble_mesh_model_cb_event_t event,
         TRACE_I("ESP_BLE_MESH_MODEL_PUBLISH_COMP_EVT");
         TRACE_I("The error code is %s", esp_err_to_name(param->model_publish_comp.err_code));
         break;
-    }
+    }   
     case ESP_BLE_MESH_CLIENT_MODEL_RECV_PUBLISH_MSG_EVT:
     {
         TRACE_I("ESP_BLE_MESH_CLIENT_MODEL_RECV_PUBLISH_MSG_EVT");
